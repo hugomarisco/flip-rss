@@ -25,7 +25,7 @@ $(document).ready(function(){
 
             // Image column
             var col3 = $('<div></div>').addClass('col-sm-3').addClass('text-center');
-            col3.append($('<img></img>').prop('src', 'http://placehold.it/150x150'));
+            col3.append($('<img></img>').prop('src', 'https://placehold.it/150x150'));
 
             // Content column
             var col9 = $('<div></div>').addClass('col-sm-9');
