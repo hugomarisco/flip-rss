@@ -18,6 +18,7 @@ function RssClient(url, provider) {
     else {
       if (this.provider == 'google') {
         this.feed = new google.feeds.Feed(this.url);
+        this.feed.setNumEntries(-1);
         this.feed.load(callback);
       }
 
