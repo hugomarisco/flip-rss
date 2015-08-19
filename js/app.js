@@ -1,36 +1,38 @@
-function RssClient(url) {
-  this.url = url;
+$('#searchRss').click(function(){
+  $(this).prop('disabled', true);
+  $('#rssUrl').prop('disabled', true);
+    
+  new RssClient($('#rssUrl').val()).ready(function(rssClient){
+    rssClient.fetchFeed(function(result) {
+      if (!result.error) {
+        result.feed.entries.forEach(function(v){
+          // Title
+          var title = $('<a></a>').attr('href', v.link).prop('target', '_blank');
+          title.append($('<h2></h2>').text(v.title));
 
-  google.load("feeds", "1");
+          // Content
+          var content = $('<p></p>').text(v.contentSnippet);
 
-  this.ready = google.setOnLoadCallback;
+          // Row
+          var row = $('<div></div>').addClass('row').addClass('entry');
 
-  errorObj = function(errorMsg) {
-    return {error: {message: errorMsg}};
-  }
+          // Image column
+          var col3 = $('<div></div>').addClass('col-sm-3').addClass('text-center');
+          col3.append($('<img></img>').prop('src', 'http://placehold.it/150x150'));
 
-  this.fetchFeed = function(callback) {
-    if (!this.url) callback(errorObj("Url is not defined"));
-    else {
-      this.feed = new google.feeds.Feed(this.url);
-      this.feed.load(callback);
-    }
-  }
-}
+          // Content column
+          var col9 = $('<div></div>').addClass('col-sm-9');
+          col9.append(title);
+          col9.append(content);
 
-var rss_client = new RssClient("http://feeds.bbci.co.uk/news/rss.xml");
+          row.append(col3).append(col9);
 
-rss_client.ready(function(){
-  rss_client.fetchFeed(function(result) {
-    if (!result.error) {
-      result.feed.entries.forEach(function(v){
-        console.log("Title: " + v.title);
-        console.log("Link: " + v.link);
-        console.log("ContentSnippet: " + v.contentSnippet);
-        console.log("-----------------");
-      });
-    } else {
-      console.log("Error: " + result.error.message);
-    }
+          $('#results').append(row);
+        });
+      } else {
+        console.log("Error: " + result.error.message);
+      }
+    });
   });
+
 });

@@ -1,0 +1,9 @@
+@media (max-width: 768px) {
+  .entry {
+    text-align: center;
+  }
+}
+
+.entry {
+  margin-bottom: 1em;
+}
