@@ -1,38 +1,45 @@
-$('#searchRss').click(function(){
-  $(this).prop('disabled', true);
-  $('#rssUrl').prop('disabled', true);
-    
-  new RssClient($('#rssUrl').val()).ready(function(rssClient){
-    rssClient.fetchFeed(function(result) {
-      if (!result.error) {
-        result.feed.entries.forEach(function(v){
-          // Title
-          var title = $('<a></a>').attr('href', v.link).prop('target', '_blank');
-          title.append($('<h2></h2>').text(v.title));
+$(document).ready(function(){
+  $('#rssForm').submit(function(e){
 
-          // Content
-          var content = $('<p></p>').text(v.contentSnippet);
+    e.preventDefault();
 
-          // Row
-          var row = $('<div></div>').addClass('row').addClass('entry');
+    var submitBtn = $('#searchRss');
+    var rssUrlInput = $('#rssUrl');
 
-          // Image column
-          var col3 = $('<div></div>').addClass('col-sm-3').addClass('text-center');
-          col3.append($('<img></img>').prop('src', 'http://placehold.it/150x150'));
+    submitBtn.prop('disabled', true);
+    rssUrlInput.prop('disabled', true);
 
-          // Content column
-          var col9 = $('<div></div>').addClass('col-sm-9');
-          col9.append(title);
-          col9.append(content);
+    new RssClient(rssUrlInput.val()).ready(function(rssClient){
+      rssClient.fetchFeed(function(result) {
+        if (!result.error) {
+          result.feed.entries.forEach(function(v){
+            // Title
+            var title = $('<a></a>').attr('href', v.link).prop('target', '_blank');
+            title.append($('<h2></h2>').text(v.title));
 
-          row.append(col3).append(col9);
+            // Content
+            var content = $('<p></p>').text(v.contentSnippet);
 
-          $('#results').append(row);
-        });
-      } else {
-        console.log("Error: " + result.error.message);
-      }
+            // Row
+            var row = $('<div></div>').addClass('row').addClass('entry');
+
+            // Image column
+            var col3 = $('<div></div>').addClass('col-sm-3').addClass('text-center');
+            col3.append($('<img></img>').prop('src', 'http://placehold.it/150x150'));
+
+            // Content column
+            var col9 = $('<div></div>').addClass('col-sm-9');
+            col9.append(title);
+            col9.append(content);
+
+            row.append(col3).append(col9);
+
+            $('#results').append(row);
+          });
+        } else {
+          alert(result.error.message);
+        }
+      });
     });
   });
-
 });
